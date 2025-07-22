@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   Bars3Icon,
   BellIcon,
@@ -56,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
         <div className="flex items-center space-x-4">
           <button
             onClick={onMenuClick}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors lg:hidden text-gray-700 dark:text-gray-300"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors lg:hidden text-gray-700 dark:text-gray-300"
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
@@ -95,21 +94,19 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
 
           {/* Install PWA button */}
           {isInstallable && (
-            <motion.button
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+            <button
               onClick={install}
               className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg text-sm font-medium transition-all duration-300 shadow-lg"
             >
               <ArrowDownTrayIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Install App</span>
-            </motion.button>
+            </button>
           )}
 
           {/* Notification demo button */}
           <button
             onClick={handleNotificationDemo}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative text-gray-700 dark:text-gray-300"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative text-gray-700 dark:text-gray-300"
           >
             <BellIcon className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
@@ -118,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
           {/* Dark mode toggle */}
           <button
             onClick={onToggleDarkMode}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             {isDark ? (
               <SunIcon className="h-5 w-5 text-yellow-500" />

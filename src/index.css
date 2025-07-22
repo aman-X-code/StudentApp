@@ -4,170 +4,39 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-:root {
-  /* Light Mode Colors */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #FAFAFA;
-  --bg-tertiary: #F5F5F5;
-  --bg-card: #FFFFFF;
-  --bg-glass: rgba(255, 255, 255, 0.8);
-  
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A4A4A;
-  --text-tertiary: #6B7280;
-  --text-muted: #9CA3AF;
-  
-  --border-primary: #E5E7EB;
-  --border-secondary: #D1D5DB;
-  
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
-  /* Gradient Backgrounds for Light Mode */
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  
-  /* Glass Effects for Light Mode */
-  --glass-backdrop: blur(20px);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-}
-
-[data-theme="dark"] {
-  /* Dark Mode Colors */
-  --bg-primary: #000000;
-  --bg-secondary: #121212;
-  --bg-tertiary: #1E1E1E;
-  --bg-card: #1A1A1A;
-  --bg-glass: rgba(0, 0, 0, 0.8);
-  
-  --text-primary: #FFFFFF;
-  --text-secondary: #E5E5E5;
-  --text-tertiary: #B3B3B3;
-  --text-muted: #737373;
-  
-  --border-primary: #2A2A2A;
-  --border-secondary: #404040;
-  
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
-  
-  /* Gradient Backgrounds for Dark Mode */
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  
-  /* Glass Effects for Dark Mode */
-  --glass-backdrop: blur(20px);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-}
-
+/* CSS Reset */
 * {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
   margin: 0;
   padding: 0;
-}
-
-/* Light mode specific body background */
-body:not([data-theme="dark"]) {
-  background-color: #f9fafb;
-}
-
-/* Dark mode specific body background */
-[data-theme="dark"] body {
-  background-color: #111827;
-}
-
-/* Reset default margins and paddings */
-* {
   box-sizing: border-box;
 }
 
-html, body, #root {
+html {
+  height: 100%;
   margin: 0;
   padding: 0;
+}
+
+body {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Glass morphism utilities */
-.glass {
-  background: var(--bg-glass);
-  backdrop-filter: var(--glass-backdrop);
-  -webkit-backdrop-filter: var(--glass-backdrop);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.glass-card {
-  @apply glass rounded-2xl;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-primary);
-  box-shadow: var(--shadow-lg);
-}
-
-.glass-button {
-  @apply glass rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:bg-opacity-80 active:scale-95;
-  background: var(--bg-glass);
-  color: var(--text-primary);
-  border: 1px solid var(--border-secondary);
-}
-
-.glass-button:hover {
-  background: var(--bg-tertiary);
-  box-shadow: var(--shadow-md);
-}
-
-.gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.floating-animation {
-  animation: floating 6s ease-in-out infinite;
-}
-
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite alternate;
-}
-
-.shimmer {
-  background: linear-gradient(90deg, transparent, var(--bg-tertiary), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-@keyframes floating {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse-glow {
-  0% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.4); }
-  100% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* Dark mode body background */
+[data-theme="dark"] body {
+  background-color: #111827;
+  color: #f9fafb;
 }
 
 /* Scrollbar styling */
@@ -176,17 +45,29 @@ html, body, #root {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 10px;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-secondary);
+  background: #cbd5e1;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-tertiary);
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 /* Custom animations */
@@ -227,14 +108,6 @@ html, body, #root {
   transition: stroke-dashoffset 1s linear;
 }
 
-/* Responsive glass effects */
-@media (max-width: 768px) {
-  .glass {
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-  }
-}
-
 /* Focus states for accessibility */
 button:focus-visible,
 input:focus-visible,
@@ -246,16 +119,12 @@ textarea:focus-visible {
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  :root {
-    --text-primary: #000000;
-    --text-secondary: #333333;
-    --border-primary: #000000;
+  body {
+    color: #000000;
   }
   
-  [data-theme="dark"] {
-    --text-primary: #FFFFFF;
-    --text-secondary: #CCCCCC;
-    --border-primary: #FFFFFF;
+  .dark body {
+    color: #FFFFFF;
   }
 }
 
