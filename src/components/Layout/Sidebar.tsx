@@ -44,10 +44,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isOpen
 
       {/* Sidebar */}
       <motion.div
-        initial={{ x: -280 }}
+        initial={false}
         animate={{ x: isOpen ? 0 : -280 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 lg:translate-x-0 lg:static lg:z-auto slide-in-left shadow-xl"
+        className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 lg:translate-x-0 lg:static lg:z-auto shadow-xl"
       >
         <div className="flex flex-col h-full">
           {/* Logo */}

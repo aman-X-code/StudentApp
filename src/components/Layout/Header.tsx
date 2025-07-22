@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
   };
 
   return (
-    <header className="glass-card border-b border-white/20 px-4 py-3 lg:px-6 slide-in-right">
+    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 lg:px-6 shadow-sm">
       <div className="flex items-center justify-between">
         {/* Left section */}
         <div className="flex items-center space-x-4">

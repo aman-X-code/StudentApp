@@ -81,19 +81,29 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* Light mode specific body background */
 body:not([data-theme="dark"]) {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
-  background-attachment: fixed;
+  background-color: #f9fafb;
 }
 
 /* Dark mode specific body background */
 [data-theme="dark"] body {
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
-  background-attachment: fixed;
+  background-color: #111827;
+}
+
+/* Reset default margins and paddings */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 /* Glass morphism utilities */

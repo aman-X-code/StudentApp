@@ -56,7 +56,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen transition-colors duration-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -73,7 +73,7 @@ function App() {
           onToggleDarkMode={() => setIsDark(!isDark)}
         />
         
-        <main className="p-4 lg:p-6 fade-in-up">
+        <main className="p-4 lg:p-6">
           {renderContent()}
         </main>
       </div>

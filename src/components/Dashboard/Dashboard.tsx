@@ -55,18 +55,18 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Message */}
-      <div className="glass-card p-8 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white">
+      <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center space-x-4 mb-4">
-          <div className="w-16 h-16 bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30">
+          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30">
             <span className="text-2xl">🌅</span>
           </div>
           <div>
             <h1 className="text-3xl font-bold text-white">Good morning, Alex!</h1>
-            <p className="text-white/90 dark:text-white/80">Ready to make today productive?</p>
+            <p className="text-white/90">Ready to make today productive?</p>
           </div>
         </div>
-        <div className="glass rounded-xl p-4 bg-white/20 dark:bg-white/10 backdrop-blur-sm border border-white/30">
-          <p className="text-white dark:text-white/90">You have <span className="font-bold text-yellow-200 dark:text-yellow-300">{pendingAssignments}</span> assignments pending and <span className="font-bold text-cyan-200 dark:text-cyan-300">{todaySchedule.length}</span> classes today.</p>
+        <div className="rounded-xl p-4 bg-white/20 backdrop-blur-sm border border-white/30">
+          <p className="text-white">You have <span className="font-bold text-yellow-200">{pendingAssignments}</span> assignments pending and <span className="font-bold text-cyan-200">{todaySchedule.length}</span> classes today.</p>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export const Dashboard: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="glass-card p-6 hover:bg-white/15 transition-all duration-300 fade-in-up"
+            className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300"
           >
             <div className="flex items-center space-x-4">
               <div className={`p-3 rounded-xl ${stat.bgColor}`}>
@@ -100,7 +100,7 @@ export const Dashboard: React.FC = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
-          className="glass-card p-6"
+          className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
         >
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Today's Schedule</h3>
           <div className="space-y-3">
@@ -124,7 +124,7 @@ export const Dashboard: React.FC = () => {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass-card p-6"
+          className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
         >
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Subject Performance</h3>
           <div className="h-64">
@@ -160,7 +160,7 @@ export const Dashboard: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="glass-card p-6"
+        className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
       >
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activities</h3>
         <div className="space-y-4">
