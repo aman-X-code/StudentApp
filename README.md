@@ -290,9 +290,6 @@ The app includes a demo notification system:
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
-
-MIT License - see LICENSE file for details
 
 ## 🆘 Support
 
