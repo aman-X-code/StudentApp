@@ -163,16 +163,16 @@ export const PomodoroTimer: React.FC = () => {
   const strokeDashoffset = circumference - (getProgress() / 100) * circumference;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800 dark:from-gray-900 dark:via-purple-900 dark:to-indigo-900 p-6 -m-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Pomodoro Timer</h1>
-          <p className="text-white/70">Stay focused and productive with time management</p>
+          <h1 className="text-2xl font-bold text-white dark:text-white">Pomodoro Timer</h1>
+          <p className="text-white/80 dark:text-gray-300">Stay focused and productive with time management</p>
         </div>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="glass-button"
+          className="glass-button text-white dark:text-gray-200 bg-white/20 dark:bg-gray-800/50 hover:bg-white/30 dark:hover:bg-gray-700/50"
         >
           <Cog6ToothIcon className="h-5 w-5" />
         </button>
@@ -187,56 +187,56 @@ export const PomodoroTimer: React.FC = () => {
             exit={{ opacity: 0, height: 0 }}
             className="glass-card p-6"
           >
-            <h3 className="text-lg font-semibold text-white mb-4">Timer Settings</h3>
+            <h3 className="text-lg font-semibold text-white dark:text-gray-200 mb-4">Timer Settings</h3>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
+                <label className="block text-sm font-medium text-white/90 dark:text-gray-300 mb-2">
                   Work Duration (min)
                 </label>
                 <input
                   type="number"
                   value={settings.workDuration}
                   onChange={(e) => setSettings(prev => ({ ...prev, workDuration: parseInt(e.target.value) || 25 }))}
-                  className="w-full px-3 py-2 glass rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg text-white dark:text-gray-200 placeholder-white/60 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none border border-white/30 dark:border-gray-600"
                   min="1"
                   max="60"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
+                <label className="block text-sm font-medium text-white/90 dark:text-gray-300 mb-2">
                   Short Break (min)
                 </label>
                 <input
                   type="number"
                   value={settings.shortBreak}
                   onChange={(e) => setSettings(prev => ({ ...prev, shortBreak: parseInt(e.target.value) || 5 }))}
-                  className="w-full px-3 py-2 glass rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg text-white dark:text-gray-200 placeholder-white/60 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none border border-white/30 dark:border-gray-600"
                   min="1"
                   max="30"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
+                <label className="block text-sm font-medium text-white/90 dark:text-gray-300 mb-2">
                   Long Break (min)
                 </label>
                 <input
                   type="number"
                   value={settings.longBreak}
                   onChange={(e) => setSettings(prev => ({ ...prev, longBreak: parseInt(e.target.value) || 15 }))}
-                  className="w-full px-3 py-2 glass rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg text-white dark:text-gray-200 placeholder-white/60 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none border border-white/30 dark:border-gray-600"
                   min="1"
                   max="60"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
+                <label className="block text-sm font-medium text-white/90 dark:text-gray-300 mb-2">
                   Long Break Interval
                 </label>
                 <input
                   type="number"
                   value={settings.longBreakInterval}
                   onChange={(e) => setSettings(prev => ({ ...prev, longBreakInterval: parseInt(e.target.value) || 4 }))}
-                  className="w-full px-3 py-2 glass rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg text-white dark:text-gray-200 placeholder-white/60 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none border border-white/30 dark:border-gray-600"
                   min="2"
                   max="10"
                 />
@@ -250,7 +250,7 @@ export const PomodoroTimer: React.FC = () => {
       <div className="glass-card p-8">
         <div className="flex flex-col items-center space-y-8">
           {/* Mode Selector */}
-          <div className="flex space-x-2 glass rounded-2xl p-2">
+          <div className="flex space-x-2 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-2 border border-white/30 dark:border-gray-600">
             {(['work', 'shortBreak', 'longBreak'] as TimerMode[]).map((mode) => {
               const config = mode === 'work' 
                 ? { title: 'Focus', icon: AcademicCapIcon }
@@ -262,8 +262,8 @@ export const PomodoroTimer: React.FC = () => {
                   onClick={() => handleModeChange(mode)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 ${
                     currentMode === mode 
-                      ? 'bg-white/20 text-white' 
-                      : 'text-white/60 hover:text-white hover:bg-white/10'
+                      ? 'bg-white/30 dark:bg-gray-700/50 text-white dark:text-gray-200' 
+                      : 'text-white/70 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-700/30'
                   }`}
                 >
                   <config.icon className="h-4 w-4" />
@@ -306,12 +306,12 @@ export const PomodoroTimer: React.FC = () => {
             
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <div className={`p-4 rounded-2xl ${modeConfig.bgColor} mb-2`}>
-                <modeConfig.icon className="h-8 w-8 text-white" />
+                <modeConfig.icon className="h-8 w-8 text-white dark:text-gray-200" />
               </div>
-              <div className="text-4xl font-bold text-white mb-1">
+              <div className="text-4xl font-bold text-white dark:text-gray-200 mb-1">
                 {formatTime(timeLeft)}
               </div>
-              <div className="text-white/70 text-sm font-medium">
+              <div className="text-white/90 dark:text-gray-300 text-sm font-medium">
                 {modeConfig.title}
               </div>
             </div>
@@ -345,7 +345,7 @@ export const PomodoroTimer: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleStop}
-              className="flex items-center space-x-2 glass-button"
+              className="flex items-center space-x-2 px-6 py-3 bg-white/20 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl text-white dark:text-gray-200 font-semibold shadow-lg hover:bg-white/30 dark:hover:bg-gray-700/50 transition-all duration-300 border border-white/30 dark:border-gray-600"
             >
               <StopIcon className="h-5 w-5" />
               <span>Stop</span>
@@ -355,20 +355,20 @@ export const PomodoroTimer: React.FC = () => {
           {/* Stats */}
           <div className="flex items-center space-x-8 text-center">
             <div>
-              <div className="text-2xl font-bold text-white">{completedSessions}</div>
-              <div className="text-white/70 text-sm">Sessions</div>
+              <div className="text-2xl font-bold text-white dark:text-gray-200">{completedSessions}</div>
+              <div className="text-white/90 dark:text-gray-300 text-sm">Sessions</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-white dark:text-gray-200">
                 {Math.floor(completedSessions / settings.longBreakInterval)}
               </div>
-              <div className="text-white/70 text-sm">Cycles</div>
+              <div className="text-white/90 dark:text-gray-300 text-sm">Cycles</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-white dark:text-gray-200">
                 {Math.round((completedSessions * settings.workDuration) / 60 * 10) / 10}h
               </div>
-              <div className="text-white/70 text-sm">Focus Time</div>
+              <div className="text-white/90 dark:text-gray-300 text-sm">Focus Time</div>
             </div>
           </div>
         </div>
