@@ -55,18 +55,18 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Message */}
-      <div className="glass-card p-8 floating-animation bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+      <div className="glass-card p-8 bg-gradient-to-br from-blue-500 to-purple-600 text-white">
         <div className="flex items-center space-x-4 mb-4">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
             <span className="text-2xl">🌅</span>
           </div>
           <div>
-            <h1 className="text-3xl font-bold gradient-text">Good morning, Alex!</h1>
-            <p className="text-white/80">Ready to make today productive?</p>
+            <h1 className="text-3xl font-bold text-white">Good morning, Alex!</h1>
+            <p className="text-white/90">Ready to make today productive?</p>
           </div>
         </div>
-        <div className="glass rounded-xl p-4 bg-white/10">
-          <p className="text-white/90">You have <span className="font-bold text-yellow-300">{pendingAssignments}</span> assignments pending and <span className="font-bold text-blue-300">{todaySchedule.length}</span> classes today.</p>
+        <div className="glass rounded-xl p-4 bg-white/20 backdrop-blur-sm">
+          <p className="text-white">You have <span className="font-bold text-yellow-200">{pendingAssignments}</span> assignments pending and <span className="font-bold text-cyan-200">{todaySchedule.length}</span> classes today.</p>
         </div>
       </div>
 
