@@ -61,7 +61,7 @@ export const Dashboard: React.FC = () => {
             <span className="text-2xl">🌅</span>
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Good morning, Alex!</h1>
+            <h1 className="text-3xl font-bold text-white">Hi, Alex!</h1>
             <p className="text-white/90">Ready to make today productive?</p>
           </div>
         </div>
