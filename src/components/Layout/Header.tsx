@@ -16,9 +16,10 @@ interface HeaderProps {
   onMenuClick: () => void;
   isDark: boolean;
   onToggleDarkMode: () => void;
+  sidebarOpen: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDarkMode }) => {
+export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDarkMode, sidebarOpen }) => {
   const { isInstallable, install } = usePWA();
   const { permission, requestPermission, sendNotification } = useNotifications();
   const isOnline = useOfflineStatus();
@@ -49,7 +50,11 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
   };
 
   return (
-    <header className="sticky top-2 z-50 mx-4 lg:mx-6 mb-6 bg-white/10 dark:bg-gray-900/10 backdrop-blur-3xl border border-white/30 dark:border-gray-400/20 px-4 py-4 lg:px-6 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.6)] before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:pointer-events-none after:absolute after:inset-0 after:rounded-3xl after:bg-gradient-to-tl after:from-transparent after:via-white/5 after:to-white/10 after:pointer-events-none">
+    <header className={`sticky top-2 z-50 mb-6 bg-white/10 dark:bg-gray-900/10 backdrop-blur-3xl border border-white/30 dark:border-gray-400/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.6)] before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-white/20 before:via-transparent before:to-transparent before:pointer-events-none after:absolute after:inset-0 after:rounded-3xl after:bg-gradient-to-tl after:from-transparent after:via-white/5 after:to-white/10 after:pointer-events-none transition-all duration-300 ${
+      sidebarOpen 
+        ? 'mx-2 px-3 py-2 lg:mx-6 lg:px-6 lg:py-4' 
+        : 'mx-4 px-4 py-4 lg:mx-6 lg:px-6'
+    }`}>
       <div className="flex items-center justify-between">
         {/* Left section */}
         <div className="flex items-center space-x-4">
@@ -60,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
             <Bars3Icon className="h-6 w-6" />
           </button>
 
-          <div className="hidden lg:block">
+          <div className={`${sidebarOpen ? 'hidden' : 'hidden lg:block'}`}>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               Welcome back, Alex! 👋
             </h2>

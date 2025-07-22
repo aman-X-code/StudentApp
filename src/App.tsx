@@ -90,12 +90,13 @@ function App() {
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto pt-2">
+        <main className={`flex-1 overflow-y-auto pt-2 ${sidebarOpen ? 'lg:ml-0' : ''}`}>
           {/* Floating Header */}
           <Header
             onMenuClick={() => setSidebarOpen(true)}
             isDark={isDark}
             onToggleDarkMode={() => setIsDark(!isDark)}
+            sidebarOpen={sidebarOpen}
           />
           {renderContent()}
         </main>
