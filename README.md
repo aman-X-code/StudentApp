@@ -275,28 +275,6 @@ The app includes a demo notification system:
 2. Set build command: `npm run build`
 3. Set output directory: `dist`
 
-## 📊 Performance
-
-- **Lighthouse Score**: 95+ for all categories
-- **Bundle Size**: Optimized with code splitting
-- **Loading Time**: < 3 seconds on 3G networks
-- **Offline Support**: Full functionality without internet
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-
-## 🆘 Support
-
-For issues and questions:
-1. Check the GitHub issues
-2. Create a new issue with detailed description
-3. Include browser and device information
 
 ---
 
