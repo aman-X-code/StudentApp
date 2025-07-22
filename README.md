@@ -41,7 +41,8 @@ A comprehensive Progressive Web App (PWA) for student management with AI assista
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Backend API server with AI endpoints (see Backend Setup section)
+- Google Gemini API key (get from https://makersuite.google.com/app/apikey)
+- Optional: Backend API server with AI endpoints (see Backend Setup section)
 
 ### Installation
 
@@ -61,10 +62,24 @@ A comprehensive Progressive Web App (PWA) for student management with AI assista
    npm run dev
    ```
 
-4. **Configure AI Assistant**
-   - Ensure your backend API is running
-   - The AI Assistant will automatically connect to `/api/ai/chat`
-   - No additional configuration needed on the frontend
+4. **Configure Environment Variables**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   
+   # Edit .env and add your API keys
+   nano .env  # or use your preferred editor
+   ```
+
+5. **Add your API Keys to .env file**
+   ```env
+   # Get your Gemini API key from: https://makersuite.google.com/app/apikey
+   VITE_GEMINI_API_KEY=your_actual_gemini_api_key_here
+   
+   # Optional: Backend API configuration
+   VITE_API_BASE_URL=http://localhost:3001
+   VITE_BACKEND_API_KEY=your_backend_api_key_here
+   ```
 
 ### Building for Production
 
