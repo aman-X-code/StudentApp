@@ -1,4 +1,5 @@
-# EduHub - Student Management System PWA
+<img width="1898" height="937" alt="image" src="https://github.com/user-attachments/assets/80872218-0ea7-4242-ace8-dd05a4c7a4bb" /># EduHub - Student Management System PWA
+<img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/85398a19-c24d-4716-abb5-118ab74372cc" />
 
 A comprehensive Progressive Web App (PWA) for student management with AI assistance powered by Google's Gemini API.
 
@@ -275,6 +276,9 @@ The app includes a demo notification system:
 2. Set build command: `npm run build`
 3. Set output directory: `dist`
 
+<img width="1910" height="960" alt="image" src="https://github.com/user-attachments/assets/20da1c52-1acb-41d9-a4ef-1b03ef9a6bc8" />
+<img width="1898" height="937" alt="image" src="https://github.com/user-attachments/assets/9d02ab9e-52f5-403a-8c33-4fb406267031" />
+<img width="1919" height="973" alt="image" src="https://github.com/user-attachments/assets/369571d8-2818-4b3f-a7c9-7f752a383618" />
 
 ---
 
