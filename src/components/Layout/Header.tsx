@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
   };
 
   return (
-    <header className="sticky top-4 z-50 mx-4 lg:mx-6 mb-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 px-4 py-3 lg:px-6 rounded-2xl shadow-lg hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
+    <header className="sticky top-2 z-50 mx-4 lg:mx-6 mb-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl border border-white/20 dark:border-gray-700/30 px-4 py-4 lg:px-6 rounded-3xl shadow-2xl hover:shadow-3xl hover:bg-white/85 dark:hover:bg-gray-800/85 hover:border-white/30 dark:hover:border-gray-600/40 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1">
       <div className="flex items-center justify-between">
         {/* Left section */}
         <div className="flex items-center space-x-4">
