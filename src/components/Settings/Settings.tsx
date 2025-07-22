@@ -38,7 +38,7 @@ export const Settings: React.FC<SettingsProps> = ({ isDark, onToggleDarkMode }) 
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 lg:px-6 pb-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>

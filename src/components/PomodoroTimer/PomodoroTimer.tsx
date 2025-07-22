@@ -163,7 +163,7 @@ export const PomodoroTimer: React.FC = () => {
   const strokeDashoffset = circumference - (getProgress() / 100) * circumference;
 
   return (
-    <div className="space-y-6 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100 dark:from-purple-600 dark:via-blue-600 dark:to-indigo-800 p-6 -m-6">
+    <div className="space-y-6 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100 dark:from-purple-600 dark:via-blue-600 dark:to-indigo-800 px-10 lg:px-12 pb-6 -mx-4 lg:-mx-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

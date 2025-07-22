@@ -53,7 +53,7 @@ export const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 lg:px-6 pb-6">
       {/* Welcome Message */}
       <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center space-x-4 mb-4">

@@ -89,15 +89,14 @@ function App() {
 
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Header */}
-        <Header
-          onMenuClick={() => setSidebarOpen(true)}
-          isDark={isDark}
-          onToggleDarkMode={() => setIsDark(!isDark)}
-        />
-        
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <main className="flex-1 overflow-y-auto pt-2">
+          {/* Floating Header */}
+          <Header
+            onMenuClick={() => setSidebarOpen(true)}
+            isDark={isDark}
+            onToggleDarkMode={() => setIsDark(!isDark)}
+          />
           {renderContent()}
         </main>
       </div>
