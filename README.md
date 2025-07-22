@@ -1,4 +1,5 @@
-<img width="1898" height="937" alt="image" src="https://github.com/user-attachments/assets/80872218-0ea7-4242-ace8-dd05a4c7a4bb" /># EduHub - Student Management System PWA
+# EduHub - Student Management System PWA
+### https://musical-gecko-c9f9eb.netlify.app/
 <img width="1919" height="958" alt="image" src="https://github.com/user-attachments/assets/85398a19-c24d-4716-abb5-118ab74372cc" />
 
 A comprehensive Progressive Web App (PWA) for student management with AI assistance powered by Google's Gemini API.
