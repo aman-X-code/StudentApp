@@ -72,6 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isOpen
         <div className="text-center text-sm text-gray-500 dark:text-gray-400">
           <p>v1.0.0</p>
           <p>© 2025 EduHub</p>
+          <p>Made by Amank</p>
         </div>
       </div>
     </div>
