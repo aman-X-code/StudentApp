@@ -34,27 +34,32 @@ export const useNotifications = (): NotificationHook => {
       badge: '/pwa-192x192.png',
       vibrate: [100, 50, 100],
       data: { dateOfArrival: Date.now() },
-      actions: [
-        { action: 'explore', title: 'View Details' },
-        { action: 'close', title: 'Close' }
-      ]
     };
 
-    const mergedOptions = { ...defaultOptions, ...options };
+    const mergedOptions: NotificationOptions = {
+      ...defaultOptions,
+      ...options,
+    };
 
-    // ✅ Show via Service Worker if active and controlling
     if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      // ✅ Use SW-based persistent notification with actions
+      mergedOptions.actions = [
+        { action: 'explore', title: 'View Details' },
+        { action: 'close', title: 'Close' }
+      ];
+
       navigator.serviceWorker.ready
         .then((registration) => {
           registration.showNotification(title, mergedOptions);
         })
         .catch((err) => {
-          console.warn('SW ready error, using fallback notification', err);
-          new Notification(title, mergedOptions); // Fallback
+          console.warn('SW not ready, fallback to direct notification', err);
+          new Notification(title, mergedOptions);
         });
     } else {
-      // ✅ Fallback: Show directly via Notification API
-      new Notification(title, mergedOptions);
+      // ❌ actions not allowed in direct Notification API — remove them
+      const { actions, ...safeOptions } = mergedOptions;
+      new Notification(title, safeOptions);
     }
   };
 
