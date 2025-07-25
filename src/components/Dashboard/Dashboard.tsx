@@ -17,27 +17,13 @@ export const Dashboard: React.FC = () => {
   const averageGrade = mockGrades.reduce((sum, grade) => sum + (grade.obtainedMarks / grade.maxMarks) * 100, 0) / mockGrades.length;
   const unreadAnnouncements = mockAnnouncements.filter(a => !a.isRead).length;
 
+  // Notification hook
   const { sendNotification, permission, requestPermission, isSupported } = useNotifications();
 
   const handleDemoNotification = async () => {
-    console.log('🔔 Demo Notification Button Clicked');
-
-    if (!isSupported) {
-      console.warn('🚫 Notifications not supported on this device or browser.');
-      alert('Notifications are not supported on your device.');
-      return;
-    }
-
     if (permission !== 'granted') {
-      const newPermission = await requestPermission();
-      console.log('🔐 Permission requested:', newPermission);
-
-      if (newPermission !== 'granted') {
-        alert('Please allow notifications from your browser settings.');
-        return;
-      }
+      await requestPermission();
     }
-
     sendNotification('Demo Notification', {
       body: 'This is a demo notification from your dashboard!',
       icon: '/pwa-192x192.png',
@@ -66,7 +52,7 @@ export const Dashboard: React.FC = () => {
     },
     {
       title: 'Average Grade',
-      value: `${Math.round(averageGrade)}%`,
+      value: ${Math.round(averageGrade)}%,
       icon: ChartBarIcon,
       color: 'text-green-600 dark:text-green-400',
       bgColor: 'bg-green-50 dark:bg-green-900/20'
@@ -92,7 +78,6 @@ export const Dashboard: React.FC = () => {
           Show Demo Notification
         </button>
       </div>
-
       {/* Welcome Message */}
       <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center space-x-4 mb-4">
@@ -120,8 +105,8 @@ export const Dashboard: React.FC = () => {
             className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300"
           >
             <div className="flex items-center space-x-4">
-              <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
+              <div className={p-3 rounded-xl ${stat.bgColor}}>
+                <stat.icon className={h-6 w-6 ${stat.color}} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{stat.title}</p>
@@ -205,20 +190,20 @@ export const Dashboard: React.FC = () => {
         <div className="space-y-4">
           {mockAssignments.slice(0, 3).map((assignment) => (
             <div key={assignment.id} className="flex items-start space-x-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              <div className={`w-2 h-2 rounded-full mt-2 ${
+              <div className={w-2 h-2 rounded-full mt-2 ${
                 assignment.status === 'submitted' ? 'bg-green-500' :
                 assignment.status === 'late' ? 'bg-red-500' : 'bg-yellow-500'
-              }`}></div>
+              }}></div>
               <div className="flex-1">
                 <h4 className="font-medium text-gray-900 dark:text-white">{assignment.title}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {assignment.subject} • Due {format(assignment.dueDate, 'MMM d, yyyy')}
                 </p>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${
+                <span className={inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${
                   assignment.status === 'submitted' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
                   assignment.status === 'late' ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' :
                   'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                }`}>
+                }}>
                   {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                 </span>
               </div>
