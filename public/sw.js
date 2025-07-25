@@ -1,102 +1,125 @@
-const CACHE_NAME = 'eduhub-static-v1';
+const CACHE_NAME = 'eduhub-v1.0.0';
+const STATIC_CACHE = 'eduhub-static-v1';
 const DYNAMIC_CACHE = 'eduhub-dynamic-v1';
 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/src/main.tsx',
+  '/src/App.tsx',
+  '/src/index.css',
   '/manifest.json',
   '/pwa-192x192.png',
-  '/pwa-512x512.png',
+  '/pwa-512x512.png'
 ];
 
-// Install: Cache static assets
+// Install event
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching static assets');
+    caches.open(STATIC_CACHE).then((cache) => {
+      console.log('Caching static assets');
       return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
 });
 
-// Activate: Clean old caches
+// Activate event
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME && key !== DYNAMIC_CACHE)
-          .map((key) => caches.delete(key))
-      )
-    )
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((cacheName) => cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE)
+          .map((cacheName) => caches.delete(cacheName))
+      );
+    })
   );
   self.clients.claim();
 });
 
-// Fetch: Cache first, then network fallback
+// Fetch event - Network first, then cache
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-
-  event.respondWith(
-    caches.match(event.request).then((cacheRes) => {
-      return (
-        cacheRes ||
-        fetch(event.request).then((fetchRes) => {
-          return caches.open(DYNAMIC_CACHE).then((cache) => {
-            cache.put(event.request, fetchRes.clone());
-            return fetchRes;
+  if (event.request.url.includes('/api/')) {
+    // API requests - Network first strategy
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(DYNAMIC_CACHE).then((cache) => {
+            cache.put(event.request, responseClone);
           });
+          return response;
         })
-      );
-    })
-  );
+        .catch(() => {
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Static assets - Cache first strategy
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request).then((fetchResponse) => {
+          const responseClone = fetchResponse.clone();
+          caches.open(DYNAMIC_CACHE).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+          return fetchResponse;
+        });
+      })
+    );
+  }
 });
 
-// Background Sync
+// Background sync
 self.addEventListener('sync', (event) => {
   if (event.tag === 'background-sync') {
     event.waitUntil(doBackgroundSync());
   }
 });
 
-// Push Notification
+// Push notifications
 self.addEventListener('push', (event) => {
-  const data = event.data?.json() || {};
-  const title = data.title || 'EduHub - Student App';
-  const body = data.body || 'You have a new update!';
   const options = {
-    body,
+    body: event.data ? event.data.text() : 'New notification from EduHub!',
     icon: '/pwa-192x192.png',
     badge: '/pwa-192x192.png',
     vibrate: [100, 50, 100],
-    data: { dateOfArrival: Date.now() },
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
     actions: [
-      { action: 'explore', title: 'View Details', icon: '/pwa-192x192.png' },
-      { action: 'close', title: 'Close', icon: '/pwa-192x192.png' },
-    ],
+      {
+        action: 'explore',
+        title: 'View Details',
+        icon: '/pwa-192x192.png'
+      },
+      {
+        action: 'close',
+        title: 'Close',
+        icon: '/pwa-192x192.png'
+      }
+    ]
   };
 
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(
+    self.registration.showNotification('EduHub - Student App', options)
+  );
 });
 
-// Notification click handler
+// Notification click
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+
   if (event.action === 'explore') {
-    event.waitUntil(clients.openWindow('/'));
+    event.waitUntil(
+      clients.openWindow('/')
+    );
   }
 });
 
-// (Optional) Message listener: receive notification command from client
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
-    const { title, options } = event.data;
-    self.registration.showNotification(title, options);
-  }
-});
-
-// Placeholder for background sync task
 async function doBackgroundSync() {
-  console.log('[SW] Background sync triggered');
+  // Implement background sync logic here
+  console.log('Background sync triggered');
 }
