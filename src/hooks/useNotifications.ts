@@ -28,21 +28,29 @@ export const useNotifications = (): NotificationHook => {
   const sendNotification = (title: string, options?: NotificationOptions): void => {
     if (!isSupported || permission !== 'granted') return;
 
-    navigator.serviceWorker.ready.then((registration) => {
-      const defaultOptions: NotificationOptions = {
-        body: 'New notification from EduHub',
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png',
-        vibrate: [100, 50, 100],
-        data: { dateOfArrival: Date.now() },
-        actions: [
-          { action: 'explore', title: 'View Details' },
-          { action: 'close', title: 'Close' }
-        ]
-      };
+    const defaultOptions: NotificationOptions = {
+      body: 'New notification from EduHub',
+      icon: '/pwa-192x192.png',
+      badge: '/pwa-192x192.png',
+      vibrate: [100, 50, 100],
+      data: { dateOfArrival: Date.now() },
+      actions: [
+        { action: 'explore', title: 'View Details' },
+        { action: 'close', title: 'Close' }
+      ]
+    };
 
-      registration.showNotification(title, { ...defaultOptions, ...options });
-    });
+    const mergedOptions = { ...defaultOptions, ...options };
+
+    // ✅ Fallback logic
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.showNotification(title, mergedOptions);
+      });
+    } else {
+      // Direct notification if service worker not ready
+      new Notification(title, mergedOptions);
+    }
   };
 
   return { permission, requestPermission, sendNotification, isSupported };
