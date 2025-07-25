@@ -9,7 +9,7 @@ interface NotificationHook {
 
 export const useNotifications = (): NotificationHook => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
-  const [isSupported] = useState('Notification' in window && 'serviceWorker' in navigator);
+  const isSupported = 'Notification' in window && 'serviceWorker' in navigator;
 
   useEffect(() => {
     if (isSupported) {
@@ -25,7 +25,7 @@ export const useNotifications = (): NotificationHook => {
     return result;
   };
 
-  const sendNotification = (title: string, options?: NotificationOptions): void => {
+  const sendNotification = async (title: string, options?: NotificationOptions): Promise<void> => {
     if (!isSupported || permission !== 'granted') return;
 
     const defaultOptions: NotificationOptions = {
@@ -39,27 +39,17 @@ export const useNotifications = (): NotificationHook => {
     const mergedOptions: NotificationOptions = {
       ...defaultOptions,
       ...options,
-    };
-
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      // ✅ Use SW-based persistent notification with actions
-      mergedOptions.actions = [
+      actions: [
         { action: 'explore', title: 'View Details' },
         { action: 'close', title: 'Close' }
-      ];
+      ]
+    };
 
-      navigator.serviceWorker.ready
-        .then((registration) => {
-          registration.showNotification(title, mergedOptions);
-        })
-        .catch((err) => {
-          console.warn('SW not ready, fallback to direct notification', err);
-          new Notification(title, mergedOptions);
-        });
-    } else {
-      // ❌ actions not allowed in direct Notification API — remove them
-      const { actions, ...safeOptions } = mergedOptions;
-      new Notification(title, safeOptions);
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      await reg.showNotification(title, mergedOptions);
+    } catch (err) {
+      console.error('❌ Failed to show notification via service worker:', err);
     }
   };
 
