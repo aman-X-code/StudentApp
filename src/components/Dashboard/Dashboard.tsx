@@ -17,13 +17,27 @@ export const Dashboard: React.FC = () => {
   const averageGrade = mockGrades.reduce((sum, grade) => sum + (grade.obtainedMarks / grade.maxMarks) * 100, 0) / mockGrades.length;
   const unreadAnnouncements = mockAnnouncements.filter(a => !a.isRead).length;
 
-  // Notification hook
   const { sendNotification, permission, requestPermission, isSupported } = useNotifications();
 
   const handleDemoNotification = async () => {
-    if (permission !== 'granted') {
-      await requestPermission();
+    console.log('🔔 Demo Notification Button Clicked');
+
+    if (!isSupported) {
+      console.warn('🚫 Notifications not supported on this device or browser.');
+      alert('Notifications are not supported on your device.');
+      return;
     }
+
+    if (permission !== 'granted') {
+      const newPermission = await requestPermission();
+      console.log('🔐 Permission requested:', newPermission);
+
+      if (newPermission !== 'granted') {
+        alert('Please allow notifications from your browser settings.');
+        return;
+      }
+    }
+
     sendNotification('Demo Notification', {
       body: 'This is a demo notification from your dashboard!',
       icon: '/pwa-192x192.png',
@@ -78,6 +92,7 @@ export const Dashboard: React.FC = () => {
           Show Demo Notification
         </button>
       </div>
+
       {/* Welcome Message */}
       <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center space-x-4 mb-4">
