@@ -33,27 +33,31 @@ export const useNotifications = (): NotificationHook => {
       icon: '/pwa-192x192.png',
       badge: '/pwa-192x192.png',
       vibrate: [100, 50, 100],
-      data: { dateOfArrival: Date.now() }
+      data: { dateOfArrival: Date.now() },
     };
 
-    const mergedOptions = { ...defaultOptions, ...options };
+    const mergedOptions: NotificationOptions = {
+      ...defaultOptions,
+      ...options,
+    };
 
     if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      // ✅ Use SW for persistent notification
+      // ✅ Use SW-based persistent notification with actions
       mergedOptions.actions = [
         { action: 'explore', title: 'View Details' },
         { action: 'close', title: 'Close' }
       ];
 
       navigator.serviceWorker.ready
-        .then(reg => reg.showNotification(title, mergedOptions))
-        .catch(err => {
-          console.warn('SW not ready, fallback to basic Notification:', err);
-          const { actions, ...fallbackOptions } = mergedOptions;
-          new Notification(title, fallbackOptions);
+        .then((registration) => {
+          registration.showNotification(title, mergedOptions);
+        })
+        .catch((err) => {
+          console.warn('SW not ready, fallback to direct notification', err);
+          new Notification(title, mergedOptions);
         });
     } else {
-      // ❌ Remove `actions` for non-persistent
+      // ❌ actions not allowed in direct Notification API — remove them
       const { actions, ...safeOptions } = mergedOptions;
       new Notification(title, safeOptions);
     }
