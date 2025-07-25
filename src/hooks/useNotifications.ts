@@ -42,13 +42,18 @@ export const useNotifications = (): NotificationHook => {
 
     const mergedOptions = { ...defaultOptions, ...options };
 
-    // ✅ Fallback logic
+    // ✅ Show via Service Worker if active and controlling
     if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.showNotification(title, mergedOptions);
-      });
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          registration.showNotification(title, mergedOptions);
+        })
+        .catch((err) => {
+          console.warn('SW ready error, using fallback notification', err);
+          new Notification(title, mergedOptions); // Fallback
+        });
     } else {
-      // Direct notification if service worker not ready
+      // ✅ Fallback: Show directly via Notification API
       new Notification(title, mergedOptions);
     }
   };
