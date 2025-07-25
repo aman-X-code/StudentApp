@@ -53,5 +53,13 @@ export const useNotifications = (): NotificationHook => {
     }
   };
 
+  if ('Notification' in window) {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        new Notification('Test Notification', { body: 'This is a direct test.' });
+      }
+    });
+  }
+
   return { permission, requestPermission, sendNotification, isSupported };
 };
