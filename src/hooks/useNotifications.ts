@@ -3,93 +3,76 @@ import { useState, useEffect } from 'react';
 interface NotificationHook {
   permission: NotificationPermission;
   requestPermission: () => Promise<NotificationPermission>;
-  sendNotification: (title: string, options?: NotificationOptions) => Promise<void>;
+  sendNotification: (title: string, options?: NotificationOptions) => void;
   isSupported: boolean;
 }
 
 export const useNotifications = (): NotificationHook => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
-  const [isSupported, setIsSupported] = useState(false);
-  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null);
+  const [isSupported] = useState('Notification' in window && 'serviceWorker' in navigator);
 
   useEffect(() => {
-    const supported = 'Notification' in window && 'serviceWorker' in navigator;
-    setIsSupported(supported);
-
-    if (supported) {
+    if (isSupported) {
       setPermission(Notification.permission);
-      navigator.serviceWorker.getRegistration().then(async (reg) => {
-        if (!reg) {
-          try {
-            const registered = await navigator.serviceWorker.register('/sw.js');
-            const ready = await navigator.serviceWorker.ready;
-            setSwRegistration(ready);
-            console.log('Service Worker registered and ready');
-          } catch (err) {
-            console.error('Service Worker registration failed:', err);
-          }
-        } else {
-          setSwRegistration(reg);
-        }
-      });
     }
-  }, []);
+  }, [isSupported]);
 
   const requestPermission = async (): Promise<NotificationPermission> => {
     if (!isSupported) return 'denied';
+
     const result = await Notification.requestPermission();
     setPermission(result);
     return result;
   };
 
-  const sendNotification = async (title: string, options?: NotificationOptions): Promise<void> => {
-    if (!isSupported || permission !== 'granted') {
-      console.warn('Notifications not supported or permission not granted');
-      return;
-    }
+  const sendNotification = (title: string, options?: NotificationOptions): void => {
+    if (!isSupported || permission !== 'granted') return;
 
+    // Enhanced mobile support
     const defaultOptions: NotificationOptions = {
-      body: 'New notification from EduHub!',
+      body: 'New notification from EduHub',
       icon: '/pwa-192x192.png',
       badge: '/pwa-192x192.png',
-      vibrate: [200, 100, 200],
-      requireInteraction: true,
-      silent: false,
+      vibrate: [200, 100, 200], // Stronger vibration for mobile
       data: { dateOfArrival: Date.now() },
+      requireInteraction: true, // Keep notification visible until user interacts
+      silent: false, // Ensure sound plays on mobile
     };
 
-    const mergedOptions = { ...defaultOptions, ...options };
+    const mergedOptions: NotificationOptions = {
+      ...defaultOptions,
+      ...options,
+    };
 
-    try {
-      if (swRegistration && swRegistration.active) {
-        const messageChannel = new MessageChannel();
+    // Check if we're on mobile and service worker is available
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (navigator.serviceWorker && navigator.serviceWorker.controller && !isMobile) {
+      // ✅ Use SW-based persistent notification with actions
+      mergedOptions.actions = [
+        { action: 'explore', title: 'View Details' },
+        { action: 'close', title: 'Close' }
+      ];
 
-        const success = await new Promise<boolean>((resolve) => {
-          messageChannel.port1.onmessage = (event) => {
-            resolve(event.data?.success ?? false);
-          };
-
-          swRegistration.active!.postMessage(
-            {
-              type: 'SHOW_NOTIFICATION',
-              title,
-              ...mergedOptions,
-            },
-            [messageChannel.port2]
-          );
-
-          // Fallback timeout
-          setTimeout(() => resolve(false), 5000);
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          registration.showNotification(title, mergedOptions);
+        })
+        .catch((err) => {
+          console.warn('SW not ready, fallback to direct notification', err);
+          // Remove actions for direct notification API
+          const { actions, ...safeOptions } = mergedOptions;
+          new Notification(title, safeOptions);
         });
-
-        if (!success) {
-          new Notification(title, mergedOptions);
-        }
-      } else {
-        new Notification(title, mergedOptions);
+    } else {
+      // ❌ actions not allowed in direct Notification API — remove them
+      const { actions, ...safeOptions } = mergedOptions;
+      try {
+        new Notification(title, safeOptions);
+      } catch (error) {
+        console.error('Direct notification failed:', error);
+        // Could implement fallback UI notification here
       }
-    } catch (err) {
-      console.error('Notification failed:', err);
     }
   };
 
