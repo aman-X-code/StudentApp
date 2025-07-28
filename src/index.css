@@ -138,3 +138,42 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Mobile notification fixes */
+@media (max-width: 768px) {
+  /* Ensure notifications are visible on mobile */
+  .notification-container {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    left: 1rem !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Improve touch targets for mobile */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Touch-specific improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* This targets touch devices */
+  button:hover {
+    /* Remove hover effects on touch devices */
+    background-color: initial;
+  }
+  
+  button:active {
+    /* Add active state for touch feedback */
+    transform: scale(0.95);
+    transition: transform 0.1s;
+  }
+}

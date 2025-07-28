@@ -28,12 +28,15 @@ export const useNotifications = (): NotificationHook => {
   const sendNotification = (title: string, options?: NotificationOptions): void => {
     if (!isSupported || permission !== 'granted') return;
 
+    // Enhanced mobile support
     const defaultOptions: NotificationOptions = {
       body: 'New notification from EduHub',
       icon: '/pwa-192x192.png',
       badge: '/pwa-192x192.png',
-      vibrate: [100, 50, 100],
+      vibrate: [200, 100, 200], // Stronger vibration for mobile
       data: { dateOfArrival: Date.now() },
+      requireInteraction: true, // Keep notification visible until user interacts
+      silent: false, // Ensure sound plays on mobile
     };
 
     const mergedOptions: NotificationOptions = {
@@ -41,7 +44,10 @@ export const useNotifications = (): NotificationHook => {
       ...options,
     };
 
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+    // Check if we're on mobile and service worker is available
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (navigator.serviceWorker && navigator.serviceWorker.controller && !isMobile) {
       // ✅ Use SW-based persistent notification with actions
       mergedOptions.actions = [
         { action: 'explore', title: 'View Details' },
@@ -54,12 +60,19 @@ export const useNotifications = (): NotificationHook => {
         })
         .catch((err) => {
           console.warn('SW not ready, fallback to direct notification', err);
-          new Notification(title, mergedOptions);
+          // Remove actions for direct notification API
+          const { actions, ...safeOptions } = mergedOptions;
+          new Notification(title, safeOptions);
         });
     } else {
       // ❌ actions not allowed in direct Notification API — remove them
       const { actions, ...safeOptions } = mergedOptions;
-      new Notification(title, safeOptions);
+      try {
+        new Notification(title, safeOptions);
+      } catch (error) {
+        console.error('Direct notification failed:', error);
+        // Could implement fallback UI notification here
+      }
     }
   };
 

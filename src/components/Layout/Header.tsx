@@ -25,9 +25,16 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
   const isOnline = useOfflineStatus();
 
   const handleNotificationDemo = async () => {
+    console.log('Notification button clicked - Mobile Debug');
+    
     if (permission !== 'granted') {
       const result = await requestPermission();
-      if (result !== 'granted') return;
+      if (result !== 'granted') {
+        console.log('Permission denied:', result);
+        // Show fallback UI notification for mobile
+        alert('Notifications permission required. Please enable in browser settings.');
+        return;
+      }
     }
 
     const notifications = [
@@ -46,7 +53,34 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
     ];
 
     const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
-    sendNotification(randomNotification.title, { body: randomNotification.body });
+    
+    try {
+      sendNotification(randomNotification.title, { body: randomNotification.body });
+      console.log('Notification sent successfully');
+    } catch (error) {
+      console.error('Notification failed:', error);
+      // Fallback for mobile - show in-app notification
+      showInAppNotification(randomNotification);
+    }
+  };
+
+  // Fallback in-app notification for mobile
+  const showInAppNotification = (notification: {title: string, body: string}) => {
+    const notificationEl = document.createElement('div');
+    notificationEl.className = 'fixed top-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm';
+    notificationEl.innerHTML = `
+      <div class="font-semibold">${notification.title}</div>
+      <div class="text-sm mt-1">${notification.body}</div>
+      <button onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-white hover:text-gray-200">×</button>
+    `;
+    document.body.appendChild(notificationEl);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      if (notificationEl.parentElement) {
+        notificationEl.remove();
+      }
+    }, 5000);
   };
 
   return (
@@ -111,7 +145,8 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, isDark, onToggleDar
           {/* Notification demo button */}
           <button
             onClick={handleNotificationDemo}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative text-gray-700 dark:text-gray-300"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative text-gray-700 dark:text-gray-300 touch-manipulation"
+            style={{ minHeight: '44px', minWidth: '44px' }}
           >
             <BellIcon className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
