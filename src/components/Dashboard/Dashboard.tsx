@@ -17,19 +17,6 @@ export const Dashboard: React.FC = () => {
   const averageGrade = mockGrades.reduce((sum, grade) => sum + (grade.obtainedMarks / grade.maxMarks) * 100, 0) / mockGrades.length;
   const unreadAnnouncements = mockAnnouncements.filter(a => !a.isRead).length;
 
-  // Notification hook
-  const { sendNotification, permission, requestPermission, isSupported } = useNotifications();
-
-  const handleDemoNotification = async () => {
-    if (permission !== 'granted') {
-      await requestPermission();
-    }
-    sendNotification('Demo Notification', {
-      body: 'This is a demo notification from your dashboard!',
-      icon: '/pwa-192x192.png',
-    });
-  };
-
   const gradeData = mockGrades.map(grade => ({
     subject: grade.subject.split(' ')[0],
     percentage: Math.round((grade.obtainedMarks / grade.maxMarks) * 100)
@@ -68,16 +55,6 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6 px-4 lg:px-6 pb-6">
-      {/* Demo Notification Button */}
-      <div className="flex justify-end mb-2">
-        <button
-          onClick={handleDemoNotification}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow"
-          disabled={!isSupported}
-        >
-          Show Demo Notification
-        </button>
-      </div>
       {/* Welcome Message */}
       <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center space-x-4 mb-4">
