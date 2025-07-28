@@ -1,3 +1,4 @@
+const CACHE_NAME = 'eduhub-v1.0.0';
 const STATIC_CACHE = 'eduhub-static-v1';
 const DYNAMIC_CACHE = 'eduhub-dynamic-v1';
 
@@ -37,19 +38,37 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - Cache-first strategy
+// Fetch event - Network first, then cache
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).then((fetchResponse) => {
-        const clone = fetchResponse.clone();
-        caches.open(DYNAMIC_CACHE).then((cache) => {
-          cache.put(event.request, clone);
+  if (event.request.url.includes('/api/')) {
+    // API requests - Network first strategy
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(DYNAMIC_CACHE).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Static assets - Cache first strategy
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request).then((fetchResponse) => {
+          const responseClone = fetchResponse.clone();
+          caches.open(DYNAMIC_CACHE).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+          return fetchResponse;
         });
-        return fetchResponse;
-      });
-    })
-  );
+      })
+    );
+  }
 });
 
 // Background sync
@@ -59,17 +78,28 @@ self.addEventListener('sync', (event) => {
   }
 });
 
-// Push notification
+// Push notifications
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'New notification from EduHub!',
     icon: '/pwa-192x192.png',
     badge: '/pwa-192x192.png',
     vibrate: [100, 50, 100],
-    data: { dateOfArrival: Date.now(), primaryKey: 1 },
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
     actions: [
-      { action: 'explore', title: 'View Details', icon: '/pwa-192x192.png' },
-      { action: 'close', title: 'Close', icon: '/pwa-192x192.png' }
+      {
+        action: 'explore',
+        title: 'View Details',
+        icon: '/pwa-192x192.png'
+      },
+      {
+        action: 'close',
+        title: 'Close',
+        icon: '/pwa-192x192.png'
+      }
     ]
   };
 
@@ -78,56 +108,18 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// Notification click handler
+// Notification click
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  console.log('Notification clicked:', event);
 
-  if (event.action === 'explore' || !event.action) {
+  if (event.action === 'explore') {
     event.waitUntil(
-      clients.matchAll({ type: 'window' }).then((clientList) => {
-        for (const client of clientList) {
-          if (client.url === '/' && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        return clients.openWindow('/');
-      })
+      clients.openWindow('/')
     );
   }
 });
 
-// ✅ Message from React app
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
-    const { title, ...rest } = event.data;
-
-    const options = {
-      body: rest.body || 'Notification from EduHub!',
-      icon: rest.icon || '/pwa-192x192.png',
-      badge: '/pwa-192x192.png',
-      vibrate: [200, 100, 200],
-      requireInteraction: true,
-      silent: false,
-      data: rest.data || { dateOfArrival: Date.now() },
-      actions: rest.actions || [
-        { action: 'explore', title: 'View Details' },
-        { action: 'close', title: 'Close' }
-      ],
-      tag: 'eduhub-notification-' + Date.now()
-    };
-
-    self.registration.showNotification(title || 'EduHub Notification', options)
-      .then(() => {
-        event.ports[0]?.postMessage({ success: true });
-      })
-      .catch((error) => {
-        console.error('Notification failed:', error);
-        event.ports[0]?.postMessage({ success: false, error: error.message });
-      });
-  }
-});
-
 async function doBackgroundSync() {
+  // Implement background sync logic here
   console.log('Background sync triggered');
 }
