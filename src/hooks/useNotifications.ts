@@ -10,33 +10,74 @@ interface NotificationHook {
 export const useNotifications = (): NotificationHook => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
   const [isSupported] = useState('Notification' in window && 'serviceWorker' in navigator);
+  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    if (isSupported) {
-      setPermission(Notification.permission);
-    }
+    const initializeNotifications = async () => {
+      if (isSupported) {
+        setPermission(Notification.permission);
+        console.log('Notification support detected:', isSupported);
+        console.log('Current permission:', Notification.permission);
+
+        // Initialize service worker
+        if ('serviceWorker' in navigator) {
+          try {
+            let registration = await navigator.serviceWorker.getRegistration();
+            if (!registration) {
+              registration = await navigator.serviceWorker.register('/sw.js');
+              console.log('Service Worker registered:', registration);
+            }
+            
+            // Wait for service worker to be ready
+            registration = await navigator.serviceWorker.ready;
+            setSwRegistration(registration);
+            console.log('Service Worker ready:', registration);
+          } catch (error) {
+            console.error('Service Worker registration failed:', error);
+          }
+        }
+      }
+    };
+
+    initializeNotifications();
   }, [isSupported]);
 
   const requestPermission = async (): Promise<NotificationPermission> => {
-    if (!isSupported) return 'denied';
+    if (!isSupported) {
+      console.log('Notifications not supported');
+      return 'denied';
+    }
 
-    const result = await Notification.requestPermission();
-    setPermission(result);
-    return result;
+    try {
+      console.log('Requesting notification permission...');
+      const result = await Notification.requestPermission();
+      console.log('Permission result:', result);
+      setPermission(result);
+      return result;
+    } catch (error) {
+      console.error('Error requesting notification permission:', error);
+      return 'denied';
+    }
   };
 
   const sendNotification = (title: string, options?: NotificationOptions): void => {
-    if (!isSupported || permission !== 'granted') return;
+    console.log('Attempting to send notification:', { title, options, permission });
+    
+    if (!isSupported || permission !== 'granted') {
+      console.log('Cannot send notification - not supported or permission denied');
+      return;
+    }
 
-    // Enhanced mobile support
+    // Enhanced mobile support - same options for all devices
     const defaultOptions: NotificationOptions = {
-      body: 'New notification from EduHub',
+      body: options?.body || 'New notification from EduHub',
       icon: '/pwa-192x192.png',
       badge: '/pwa-192x192.png',
-      vibrate: [200, 100, 200], // Stronger vibration for mobile
+      vibrate: [200, 100, 200],
       data: { dateOfArrival: Date.now() },
-      requireInteraction: true, // Keep notification visible until user interacts
-      silent: false, // Ensure sound plays on mobile
+      requireInteraction: true,
+      silent: false,
+      tag: 'eduhub-notification-' + Date.now(),
     };
 
     const mergedOptions: NotificationOptions = {
@@ -44,34 +85,72 @@ export const useNotifications = (): NotificationHook => {
       ...options,
     };
 
-    // Check if we're on mobile and service worker is available
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (navigator.serviceWorker && navigator.serviceWorker.controller && !isMobile) {
-      // ✅ Use SW-based persistent notification with actions
-      mergedOptions.actions = [
-        { action: 'explore', title: 'View Details' },
-        { action: 'close', title: 'Close' }
-      ];
+    // Method 1: Try Service Worker notification first (works on all devices including mobile)
+    if (navigator.serviceWorker && swRegistration) {
+      console.log('Sending service worker notification...');
+      
+      // Enhanced options for service worker notifications
+      const swOptions = {
+        ...mergedOptions,
+        actions: [
+          { action: 'explore', title: 'View Details' },
+          { action: 'close', title: 'Close' }
+        ]
+      };
 
       navigator.serviceWorker.ready
         .then((registration) => {
-          registration.showNotification(title, mergedOptions);
+          return registration.showNotification(title, swOptions);
         })
-        .catch((err) => {
-          console.warn('SW not ready, fallback to direct notification', err);
-          // Remove actions for direct notification API
+        .then(() => {
+          console.log('Service worker notification sent successfully');
+        })
+        .catch((error) => {
+          console.warn('Service worker notification failed, trying direct notification:', error);
+          
+          // Method 2: Fallback to direct Notification API (remove actions as they're not supported)
           const { actions, ...safeOptions } = mergedOptions;
-          new Notification(title, safeOptions);
+          try {
+            const notification = new Notification(title, safeOptions);
+            
+            notification.onclick = () => {
+              console.log('Direct notification clicked');
+              window.focus();
+              notification.close();
+            };
+
+            // Auto close after 8 seconds
+            setTimeout(() => {
+              notification.close();
+            }, 8000);
+
+            console.log('Direct notification sent successfully');
+          } catch (directError) {
+            console.error('Direct notification also failed:', directError);
+          }
         });
     } else {
-      // ❌ actions not allowed in direct Notification API — remove them
+      // Method 2: Direct Notification API (no service worker available)
+      console.log('Service worker not available, using direct notification API');
+      
       const { actions, ...safeOptions } = mergedOptions;
       try {
-        new Notification(title, safeOptions);
+        const notification = new Notification(title, safeOptions);
+        
+        notification.onclick = () => {
+          console.log('Direct notification clicked');
+          window.focus();
+          notification.close();
+        };
+
+        // Auto close after 8 seconds
+        setTimeout(() => {
+          notification.close();
+        }, 8000);
+
+        console.log('Direct notification sent successfully');
       } catch (error) {
         console.error('Direct notification failed:', error);
-        // Could implement fallback UI notification here
       }
     }
   };
